@@ -1,0 +1,968 @@
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cartas de Enfrentamento – Misofonia</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface2: #1c2433;
+      --border: rgba(255,255,255,0.07);
+      --accent: #6ee7b7;
+      --accent2: #a78bfa;
+      --text: #e2e8f0;
+      --text-muted: #64748b;
+      --text-soft: #94a3b8;
+      --card-bg: linear-gradient(145deg, #1e2a3a 0%, #0f1923 100%);
+      --carta-bg: linear-gradient(145deg, #1a2744 0%, #0e1a2e 100%);
+      --carta-border: rgba(110,231,183,0.2);
+      --carta-text: #cdd9f0;
+      --stack1: rgba(255,255,255,0.025);
+      --stack2: rgba(255,255,255,0.04);
+      --shadow-color: rgba(0,0,0,0.5);
+      --glow: rgba(110,231,183,0.15);
+      --noise-opacity: 0.4;
+      --radial1: rgba(110,231,183,0.06);
+      --radial2: rgba(167,139,250,0.06);
+    }
+
+    /* ── Light Mode ── */
+    body.light {
+      --bg: #f5f7f2;
+      --surface: #ffffff;
+      --surface2: #f0f4ef;
+      --border: rgba(0,0,0,0.08);
+      --text: #1a2e1a;
+      --text-muted: #7a9177;
+      --text-soft: #4a6649;
+      --card-bg: linear-gradient(145deg, #e8f5e2 0%, #d4ead0 100%);
+      --carta-bg: linear-gradient(145deg, #eaf5f0 0%, #d8ede6 100%);
+      --carta-border: rgba(34,120,80,0.25);
+      --carta-text: #1a3a2a;
+      --stack1: rgba(0,0,0,0.04);
+      --stack2: rgba(0,0,0,0.07);
+      --shadow-color: rgba(0,0,0,0.12);
+      --glow: rgba(34,120,80,0.1);
+      --noise-opacity: 0.15;
+      --radial1: rgba(110,200,140,0.08);
+      --radial2: rgba(100,180,120,0.06);
+      --accent: #1e8a55;
+      --accent2: #5b7fa6;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* Atmospheric background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 10%, var(--radial1) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 80% at 80% 80%, var(--radial2) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+      transition: background 0.4s ease;
+    }
+
+    /* Subtle noise texture */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: var(--noise-opacity);
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 24px 80px;
+    }
+
+    /* ── Header ── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 48px 0 16px;
+    }
+
+    .header-text h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 300;
+      letter-spacing: 0.01em;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .header-text p {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .menu-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 14px;
+      cursor: pointer;
+      color: var(--text-soft);
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .menu-btn:hover {
+      border-color: var(--accent);
+      color: var(--text);
+      background: rgba(110,231,183,0.06);
+    }
+
+    .menu-wrapper {
+      position: relative;
+    }
+
+    .menu-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 20px 50px var(--shadow-color);
+      overflow: hidden;
+      min-width: 270px;
+      display: none;
+      z-index: 100;
+    }
+
+    .menu-dropdown.aberto { display: block; animation: fadeIn 0.15s ease; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Settings section label */
+    .menu-section-label {
+      padding: 14px 20px 8px;
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    /* Toggle row */
+    .menu-toggle-row {
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: default;
+      transition: background 0.15s;
+    }
+
+    .menu-toggle-row:hover { background: rgba(110,231,183,0.04); }
+
+    .menu-toggle-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex: 1;
+    }
+
+    .menu-toggle-label {
+      font-size: 0.9rem;
+      color: var(--text-soft);
+      line-height: 1.2;
+    }
+
+    .info-btn {
+      background: none;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+      line-height: 1;
+      position: relative;
+    }
+
+    .info-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* Toggle switch */
+    .toggle-switch {
+      position: relative;
+      width: 40px;
+      height: 22px;
+      flex-shrink: 0;
+    }
+
+    .toggle-switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+      position: absolute;
+    }
+
+    .toggle-track {
+      position: absolute;
+      inset: 0;
+      border-radius: 99px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: background 0.25s, border-color 0.25s;
+    }
+
+    .toggle-track::after {
+      content: '';
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: transform 0.25s cubic-bezier(0.34, 1.2, 0.64, 1), background 0.25s;
+    }
+
+    .toggle-switch input:checked + .toggle-track {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .toggle-switch input:checked + .toggle-track::after {
+      transform: translateX(18px);
+      background: white;
+    }
+
+    /* Menu divider */
+    .menu-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 4px 0;
+    }
+
+    .menu-item {
+      padding: 14px 20px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      color: #f87171;
+      transition: background 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    body.light .menu-item { color: #dc3535; }
+    .menu-item:hover { background: rgba(248,113,113,0.08); }
+
+    /* ── Tooltip modal ── */
+    .tooltip-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background: rgba(0,0,0,0.5);
+      backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+    }
+
+    .tooltip-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .tooltip-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 32px;
+      max-width: 340px;
+      width: 100%;
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+      transform: scale(0.94) translateY(8px);
+      transition: transform 0.25s cubic-bezier(0.34, 1.1, 0.64, 1);
+    }
+
+    .tooltip-overlay.show .tooltip-box {
+      transform: scale(1) translateY(0);
+    }
+
+    .tooltip-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.3rem;
+      font-weight: 400;
+      color: var(--text);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .tooltip-title span { color: var(--accent); }
+
+    .tooltip-body {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--text-soft);
+    }
+
+    .tooltip-close {
+      margin-top: 24px;
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: none;
+      color: var(--text-soft);
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .tooltip-close:hover {
+      background: rgba(110,231,183,0.08);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap {
+      margin: 32px 0 0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .progress-bar-bg {
+      flex: 1;
+      height: 3px;
+      background: var(--border);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 0%;
+    }
+
+    .progress-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      min-width: 50px;
+      text-align: right;
+    }
+
+    /* ── Deck Stage ── */
+    .stage {
+      margin: 52px auto;
+      width: 100%;
+      height: 440px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Stack shadow cards */
+    .stack-card {
+      position: absolute;
+      width: 260px;
+      height: 360px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .stack-card:nth-child(1) {
+      background: var(--stack1);
+      transform: rotate(5deg) translate(14px, 8px);
+    }
+
+    .stack-card:nth-child(2) {
+      background: var(--stack2);
+      transform: rotate(2.5deg) translate(7px, 4px);
+    }
+
+    /* Main deck */
+    .deck-clickable {
+      position: absolute;
+      width: 260px;
+      height: 360px;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .deck-face {
+      width: 100%;
+      height: 100%;
+      background: var(--card-bg);
+      border-radius: 20px;
+      border: 1px solid rgba(110,231,183,0.12);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04),
+        0 20px 60px var(--shadow-color),
+        0 0 40px var(--glow);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.4s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deck-face::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse 60% 50% at 50% 0%, var(--glow) 0%, transparent 70%);
+    }
+
+    .deck-clickable:hover .deck-face {
+      transform: translateY(-4px);
+      box-shadow:
+        0 0 0 1px rgba(110,231,183,0.15),
+        0 30px 80px var(--shadow-color),
+        0 0 60px var(--glow);
+    }
+
+    .deck-clickable:active .deck-face {
+      transform: translateY(0px) scale(0.98);
+    }
+
+    .deck-icon {
+      font-size: 2.4rem;
+      opacity: 0.5;
+    }
+
+    .deck-cta {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.7;
+    }
+
+    .deck-count-badge {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: rgba(110,231,183,0.1);
+      border: 1px solid rgba(110,231,183,0.15);
+      border-radius: 99px;
+      padding: 4px 12px;
+      font-size: 0.72rem;
+      color: var(--accent);
+      letter-spacing: 0.05em;
+    }
+
+    /* Pulled card */
+    .carta-puxada {
+      position: absolute;
+      width: 300px;
+      height: 390px;
+      border-radius: 22px;
+      background: var(--carta-bg);
+      border: 1px solid var(--carta-border);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.05),
+        0 30px 80px var(--shadow-color),
+        0 0 80px var(--glow);
+      padding: 40px 36px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      z-index: 20;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(-60px) rotate(-6deg) scale(0.88);
+      transition: all 0s;
+    }
+
+    .carta-puxada.animando {
+      transition: opacity 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.7s cubic-bezier(0.34, 1.15, 0.64, 1);
+    }
+
+    .carta-puxada.visivel {
+      opacity: 1;
+      transform: translateX(0) rotate(0deg) scale(1);
+    }
+
+    .carta-puxada::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 22px;
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(110,231,183,0.08) 0%, transparent 70%);
+    }
+
+    .carta-numero {
+      font-size: 0.7rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--accent);
+      opacity: 0.6;
+      margin-bottom: 20px;
+    }
+
+    .carta-texto {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.25rem;
+      font-weight: 300;
+      line-height: 1.75;
+      color: var(--carta-text);
+      position: relative;
+      transition: color 0.4s;
+    }
+
+    .carta-ornament {
+      position: absolute;
+      bottom: 22px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--accent), transparent);
+      opacity: 0.4;
+    }
+
+    /* ── History ── */
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .carta-escolhida {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px 24px;
+      margin: 10px 0;
+      font-size: 0.96rem;
+      color: var(--text-soft);
+      line-height: 1.7;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      transition: border-color 0.2s, background 0.2s;
+      animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .carta-escolhida:hover {
+      background: var(--surface2);
+      border-color: rgba(110,231,183,0.1);
+    }
+
+    .numero-carta {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: var(--accent);
+      opacity: 0.5;
+      padding-top: 4px;
+      min-width: 20px;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 0;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 60px;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: var(--surface);
+      border: 1px solid rgba(110,231,183,0.2);
+      border-radius: 99px;
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      color: var(--accent);
+      opacity: 0;
+      transition: all 0.3s ease;
+      pointer-events: none;
+      z-index: 200;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-text">
+      <h1>Cartas de Enfrentamento</h1>
+      <p>Misofonia · Ferramentas de regulação</p>
+    </div>
+    <div class="menu-wrapper">
+      <button class="menu-btn" id="menu-icon" aria-label="Menu">⋯</button>
+      <div class="menu-dropdown" id="menu-dropdown">
+
+        <div class="menu-section-label">Configurações</div>
+
+        <!-- Light mode toggle -->
+        <div class="menu-toggle-row">
+          <div class="menu-toggle-left">
+            <span style="font-size:1rem;">☀️</span>
+            <span class="menu-toggle-label">Modo claro</span>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-light">
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+
+        <!-- Flow mode toggle -->
+        <div class="menu-toggle-row">
+          <div class="menu-toggle-left">
+            <span style="font-size:1rem;">🔁</span>
+            <span class="menu-toggle-label">Modo de fluxo</span>
+            <button class="info-btn" id="btn-info-fluxo" title="O que é isso?">?</button>
+          </div>
+          <label class="toggle-switch">
+            <input type="checkbox" id="toggle-fluxo">
+            <div class="toggle-track"></div>
+          </label>
+        </div>
+
+        <div class="menu-divider"></div>
+
+        <div class="menu-item" id="btn-reset">
+          <span>↺</span> Apagar histórico e reiniciar
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="progress-wrap">
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill"></div>
+    </div>
+    <div class="progress-label" id="progress-label">0 / 10</div>
+  </div>
+
+  <div class="stage" id="deck-area">
+    <!-- Stack illusion -->
+    <div class="stack-card"></div>
+    <div class="stack-card"></div>
+
+    <!-- Clickable deck -->
+    <div class="deck-clickable" id="deck-btn">
+      <div class="deck-face">
+        <div class="deck-icon">✦</div>
+        <div class="deck-cta">Toque para revelar</div>
+        <div class="deck-count-badge" id="deck-badge">10 cartas</div>
+      </div>
+    </div>
+
+    <!-- Revealed card -->
+    <div class="carta-puxada" id="carta-puxada">
+      <div class="carta-numero" id="carta-numero"></div>
+      <div class="carta-texto" id="carta-texto"></div>
+      <div class="carta-ornament"></div>
+    </div>
+  </div>
+
+  <div id="area-historico">
+    <div class="section-label">Histórico de cartas</div>
+    <div id="lista-historico"></div>
+  </div>
+</div>
+
+<footer>Nirvana Galvão</footer>
+
+<div class="toast" id="toast"></div>
+
+<!-- Modo de fluxo explanation modal -->
+<div class="tooltip-overlay" id="tooltip-fluxo">
+  <div class="tooltip-box">
+    <div class="tooltip-title"><span>🔁</span> Modo de fluxo</div>
+    <div class="tooltip-body">
+      Quando ativado, o baralho é reiniciado automaticamente assim que você vê todas as 10 cartas.<br><br>
+      Em vez de parar e exibir uma mensagem de conclusão, o ciclo recomeça de forma contínua — ideal para momentos em que você precisa de suporte prolongado e quer continuar acessando as cartas sem interrupção.
+    </div>
+    <button class="tooltip-close" id="btn-fechar-tooltip">Entendido</button>
+  </div>
+</div>
+
+<script>
+const cartas = [
+  `"Esse som não é uma agressão contra mim.\nÉ apenas um comportamento automático de outra pessoa.\nMinha mente está interpretando como ameaça, mas não é."`,
+  `"É desconfortável, mas eu consigo suportar.\nO desconforto sobe… e depois desce.\nEu não preciso reagir imediatamente."`,
+  `"Isso não é pessoal.\nA outra pessoa provavelmente nem percebe o som.\nMinha reação é maior que a intenção."`,
+  `"Eu não controlo o som.\nMas controlo minha resposta.\nPosso escolher ficar calmo."`,
+  `Inspire 4 seg\nSegure 4 seg\nSolte 6 seg\n\n"Enquanto eu respiro, meu corpo desacelera."`,
+  `"O que exatamente estou sentindo agora?\nRaiva? Nojo? Ansiedade?\nPosso observar sem agir."`,
+  `"De 0 a 10, quanto está agora?\nJá estive em 10 antes e sobrevivi.\nIsso vai passar."`,
+  `"Posso ficar e treinar minha tolerância\nou posso sair de forma respeitosa.\nFugir impulsivamente não é a única opção."`,
+  `Pensamento automático:\n"Ele faz isso para me irritar."\n\nAlternativa: "Não há evidência de intenção."`,
+  `"É só um som.\nEu estou seguro.\nMeu corpo pode relaxar."`
+];
+
+// ── Storage keys ──
+const CHAVE_HISTORICO = "misofonia_cartas_escolhidas_nirvana";
+const CHAVE_LIGHT     = "misofonia_config_light";
+const CHAVE_FLUXO     = "misofonia_config_fluxo";
+
+// ── State ──
+let escolhidas   = JSON.parse(localStorage.getItem(CHAVE_HISTORICO)) || [];
+let modoClaro    = localStorage.getItem(CHAVE_LIGHT)  === "true";
+let modoFluxo    = localStorage.getItem(CHAVE_FLUXO)  === "true";
+let isProcessing = false;
+
+// ── DOM refs ──
+const deckBtn          = document.getElementById("deck-btn");
+const cartaEl          = document.getElementById("carta-puxada");
+const cartaNumeroEl    = document.getElementById("carta-numero");
+const cartaTextoEl     = document.getElementById("carta-texto");
+const listaEl          = document.getElementById("lista-historico");
+const menuIcon         = document.getElementById("menu-icon");
+const menuDropdown     = document.getElementById("menu-dropdown");
+const btnReset         = document.getElementById("btn-reset");
+const progressFill     = document.getElementById("progress-fill");
+const progressLabel    = document.getElementById("progress-label");
+const deckBadge        = document.getElementById("deck-badge");
+const toastEl          = document.getElementById("toast");
+const toggleLight      = document.getElementById("toggle-light");
+const toggleFluxo      = document.getElementById("toggle-fluxo");
+const btnInfoFluxo     = document.getElementById("btn-info-fluxo");
+const tooltipFluxo     = document.getElementById("tooltip-fluxo");
+const btnFecharTooltip = document.getElementById("btn-fechar-tooltip");
+
+// ── Apply saved settings on load ──
+function aplicarModoClaro(ativo) {
+  document.body.classList.toggle("light", ativo);
+  toggleLight.checked = ativo;
+}
+
+function aplicarModoFluxo(ativo) {
+  toggleFluxo.checked = ativo;
+}
+
+aplicarModoClaro(modoClaro);
+aplicarModoFluxo(modoFluxo);
+
+// ── Toast ──
+let toastTimer;
+function showToast(msg) {
+  clearTimeout(toastTimer);
+  toastEl.textContent = msg;
+  toastEl.classList.add("show");
+  toastTimer = setTimeout(() => toastEl.classList.remove("show"), 2500);
+}
+
+// ── UI update ──
+function atualizarUI() {
+  const total     = cartas.length;
+  const vistas    = escolhidas.length;
+  const restantes = total - vistas;
+  const pct       = (vistas / total) * 100;
+
+  progressFill.style.width  = pct + "%";
+  progressLabel.textContent = `${vistas} / ${total}`;
+  deckBadge.textContent     = restantes === 0
+    ? (modoFluxo ? "Reiniciando…" : "Completo")
+    : `${restantes} ${restantes === 1 ? 'carta' : 'cartas'}`;
+
+  listaEl.innerHTML = vistas === 0
+    ? '<div class="empty-state">Ainda sem cartas no histórico</div>'
+    : escolhidas.slice().reverse().map((idx, i) => {
+        const n = vistas - i;
+        return `<div class="carta-escolhida">
+          <span class="numero-carta">${n}</span>
+          <span>${cartas[idx].replace(/\n/g, "<br>")}</span>
+        </div>`;
+      }).join('');
+}
+
+// ── Draw card ──
+async function puxarCarta() {
+  if (isProcessing) return;
+  isProcessing = true;
+
+  let disponiveis = cartas.map((_, i) => i).filter(i => !escolhidas.includes(i));
+
+  if (disponiveis.length === 0) {
+    if (modoFluxo) {
+      // Auto-restart silently
+      escolhidas = [];
+      localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(escolhidas));
+      atualizarUI();
+      disponiveis = cartas.map((_, i) => i);
+      showToast("Baralho reiniciado · Modo de fluxo ativo 🔁");
+    } else {
+      showToast("Você viu todas as cartas ✦");
+      isProcessing = false;
+      return;
+    }
+  }
+
+  cartaEl.classList.remove("visivel", "animando");
+  await new Promise(r => setTimeout(r, 100));
+
+  const idx    = disponiveis[Math.floor(Math.random() * disponiveis.length)];
+  const numero = escolhidas.length + 1;
+
+  cartaNumeroEl.textContent = `Carta ${numero} de ${cartas.length}`;
+  cartaTextoEl.innerHTML    = cartas[idx].replace(/\n/g, "<br>");
+
+  void cartaEl.offsetWidth;
+  cartaEl.classList.add("animando");
+  await new Promise(r => setTimeout(r, 50));
+  cartaEl.classList.add("visivel");
+
+  escolhidas.push(idx);
+  localStorage.setItem(CHAVE_HISTORICO, JSON.stringify(escolhidas));
+  atualizarUI();
+
+  setTimeout(() => { isProcessing = false; }, 900);
+}
+
+// ── Reset history ──
+function reiniciarTudo(e) {
+  e.stopPropagation();
+  if (!confirm("Apagar todo o histórico e começar de novo?")) return;
+  escolhidas = [];
+  localStorage.removeItem(CHAVE_HISTORICO);
+  cartaEl.classList.remove("visivel", "animando");
+  atualizarUI();
+  menuDropdown.classList.remove("aberto");
+  showToast("Histórico apagado ✓");
+}
+
+// ── Toggle: Light mode ──
+toggleLight.addEventListener("change", () => {
+  modoClaro = toggleLight.checked;
+  localStorage.setItem(CHAVE_LIGHT, modoClaro);
+  aplicarModoClaro(modoClaro);
+  showToast(modoClaro ? "Modo claro ativado ☀️" : "Modo escuro ativado 🌙");
+});
+
+// ── Toggle: Flow mode ──
+toggleFluxo.addEventListener("change", () => {
+  modoFluxo = toggleFluxo.checked;
+  localStorage.setItem(CHAVE_FLUXO, modoFluxo);
+  atualizarUI();
+  showToast(modoFluxo ? "Modo de fluxo ativado 🔁" : "Modo de fluxo desativado");
+});
+
+// ── Info tooltip ──
+btnInfoFluxo.addEventListener("click", (e) => {
+  e.stopPropagation();
+  tooltipFluxo.classList.add("show");
+});
+
+btnFecharTooltip.addEventListener("click", () => {
+  tooltipFluxo.classList.remove("show");
+});
+
+tooltipFluxo.addEventListener("click", (e) => {
+  if (e.target === tooltipFluxo) tooltipFluxo.classList.remove("show");
+});
+
+// ── Menu ──
+deckBtn.addEventListener("click", puxarCarta);
+
+menuIcon.addEventListener("click", (e) => {
+  e.stopPropagation();
+  menuDropdown.classList.toggle("aberto");
+});
+
+btnReset.addEventListener("click", reiniciarTudo);
+
+document.addEventListener("click", (e) => {
+  if (!menuIcon.contains(e.target) && !menuDropdown.contains(e.target)) {
+    menuDropdown.classList.remove("aberto");
+  }
+});
+
+// ── Init ──
+atualizarUI();
+</script>
+</body>
+</html>

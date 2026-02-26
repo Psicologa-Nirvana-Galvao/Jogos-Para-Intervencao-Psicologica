@@ -8,50 +8,50 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0d1117;
-      --surface: #161b22;
-      --surface2: #1c2433;
-      --border: rgba(255,255,255,0.07);
-      --accent: #6ee7b7;
-      --accent2: #a78bfa;
-      --text: #e2e8f0;
-      --text-muted: #64748b;
-      --text-soft: #94a3b8;
-      --card-bg: linear-gradient(145deg, #1e2a3a 0%, #0f1923 100%);
-      --carta-bg: linear-gradient(145deg, #1a2744 0%, #0e1a2e 100%);
-      --carta-border: rgba(110,231,183,0.2);
-      --carta-text: #cdd9f0;
-      --stack1: rgba(255,255,255,0.025);
-      --stack2: rgba(255,255,255,0.04);
-      --shadow-color: rgba(0,0,0,0.5);
-      --glow: rgba(110,231,183,0.15);
-      --noise-opacity: 0.4;
-      --radial1: rgba(110,231,183,0.06);
-      --radial2: rgba(167,139,250,0.06);
+      --bg: #0a0304;
+      --surface: #130608;
+      --surface2: #1c0a0e;
+      --border: rgba(220,80,90,0.1);
+      --accent: #c94055;
+      --accent2: #8b1a2a;
+      --text: #f2d8db;
+      --text-muted: #804050;
+      --text-soft: #c07080;
+      --card-bg: linear-gradient(145deg, #200a10 0%, #0d0305 100%);
+      --carta-bg: linear-gradient(145deg, #2a0c14 0%, #130407 100%);
+      --carta-border: rgba(180,50,70,0.3);
+      --carta-text: #f0d0d5;
+      --stack1: rgba(180,40,55,0.05);
+      --stack2: rgba(180,40,55,0.09);
+      --shadow-color: rgba(0,0,0,0.7);
+      --glow: rgba(160,30,50,0.22);
+      --noise-opacity: 0.35;
+      --radial1: rgba(150,20,40,0.12);
+      --radial2: rgba(100,10,25,0.09);
     }
 
     /* ── Light Mode ── */
     body.light {
-      --bg: #f5f7f2;
-      --surface: #ffffff;
-      --surface2: #f0f4ef;
-      --border: rgba(0,0,0,0.08);
-      --text: #1a2e1a;
-      --text-muted: #7a9177;
-      --text-soft: #4a6649;
-      --card-bg: linear-gradient(145deg, #e8f5e2 0%, #d4ead0 100%);
-      --carta-bg: linear-gradient(145deg, #eaf5f0 0%, #d8ede6 100%);
-      --carta-border: rgba(34,120,80,0.25);
-      --carta-text: #1a3a2a;
-      --stack1: rgba(0,0,0,0.04);
-      --stack2: rgba(0,0,0,0.07);
-      --shadow-color: rgba(0,0,0,0.12);
-      --glow: rgba(34,120,80,0.1);
-      --noise-opacity: 0.15;
-      --radial1: rgba(110,200,140,0.08);
-      --radial2: rgba(100,180,120,0.06);
-      --accent: #1e8a55;
-      --accent2: #5b7fa6;
+      --bg: #fdf5f5;
+      --surface: #fff8f8;
+      --surface2: #fce8e8;
+      --border: rgba(160,30,50,0.12);
+      --text: #2a0608;
+      --text-muted: #9a4050;
+      --text-soft: #7a2030;
+      --card-bg: linear-gradient(145deg, #fcd8dc 0%, #f5c0c8 100%);
+      --carta-bg: linear-gradient(145deg, #fde8ea 0%, #f8d0d5 100%);
+      --carta-border: rgba(160,30,55,0.28);
+      --carta-text: #380810;
+      --stack1: rgba(180,40,60,0.07);
+      --stack2: rgba(180,40,60,0.13);
+      --shadow-color: rgba(120,0,20,0.18);
+      --glow: rgba(200,60,80,0.14);
+      --noise-opacity: 0.1;
+      --radial1: rgba(220,80,100,0.1);
+      --radial2: rgba(180,40,70,0.08);
+      --accent: #a01828;
+      --accent2: #c03045;
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -139,7 +139,7 @@
     .menu-btn:hover {
       border-color: var(--accent);
       color: var(--text);
-      background: rgba(110,231,183,0.06);
+      background: rgba(180,60,80,0.06);
     }
 
     .menu-wrapper {
@@ -185,7 +185,7 @@
       transition: background 0.15s;
     }
 
-    .menu-toggle-row:hover { background: rgba(110,231,183,0.04); }
+    .menu-toggle-row:hover { background: rgba(180,60,80,0.05); }
 
     .menu-toggle-left {
       display: flex;
@@ -362,7 +362,7 @@
     }
 
     .tooltip-close:hover {
-      background: rgba(110,231,183,0.08);
+      background: rgba(150,20,40,0.08);
       border-color: var(--accent);
       color: var(--accent);
     }
@@ -443,7 +443,7 @@
       height: 100%;
       background: var(--card-bg);
       border-radius: 20px;
-      border: 1px solid rgba(110,231,183,0.12);
+      border: 1px solid rgba(160,30,50,0.2);
       box-shadow:
         0 0 0 1px rgba(255,255,255,0.04),
         0 20px 60px var(--shadow-color),
@@ -468,7 +468,7 @@
     .deck-clickable:hover .deck-face {
       transform: translateY(-4px);
       box-shadow:
-        0 0 0 1px rgba(110,231,183,0.15),
+        0 0 0 1px rgba(160,30,50,0.25),
         0 30px 80px var(--shadow-color),
         0 0 60px var(--glow);
     }
@@ -495,8 +495,8 @@
       position: absolute;
       bottom: 20px;
       right: 20px;
-      background: rgba(110,231,183,0.1);
-      border: 1px solid rgba(110,231,183,0.15);
+      background: rgba(160,30,50,0.12);
+      border: 1px solid rgba(160,30,50,0.22);
       border-radius: 99px;
       padding: 4px 12px;
       font-size: 0.72rem;
@@ -544,7 +544,7 @@
       position: absolute;
       inset: 0;
       border-radius: 22px;
-      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(110,231,183,0.08) 0%, transparent 70%);
+      background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(150,20,40,0.12) 0%, transparent 70%);
     }
 
     .carta-numero {
@@ -619,7 +619,7 @@
 
     .carta-escolhida:hover {
       background: var(--surface2);
-      border-color: rgba(110,231,183,0.1);
+      border-color: rgba(150,20,40,0.2);
     }
 
     .numero-carta {
@@ -654,7 +654,7 @@
       left: 50%;
       transform: translateX(-50%) translateY(20px);
       background: var(--surface);
-      border: 1px solid rgba(110,231,183,0.2);
+      border: 1px solid rgba(150,20,40,0.3);
       border-radius: 99px;
       padding: 12px 24px;
       font-size: 0.85rem;
